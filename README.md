@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # FRANCA IDL Project
 
 ## What is FRANCA IDL?
@@ -72,3 +73,6 @@ See the examples in the `interfaces/basic/` directory to understand FRANCA synta
 3. **IoT Sensor** - Temperature and humidity monitoring
 4. **Media Player** - Audio/video control interface
 5. **Navigation System** - GPS and routing services
+=======
+# Franca-IDL-Project
+>>>>>>> ee6f53925598ea668d7cb84c8362ee2935720b04
