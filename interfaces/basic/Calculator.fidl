@@ -1,0 +1,157 @@
+package org.example.calculator
+
+import org.example.common.* from "../common/CommonTypes.fidl"
+
+<**
+	@description: Basic calculator interface demonstrating FRANCA IDL concepts
+	@author: FRANCA IDL Tutorial
+	@version: 1.0
+**>
+interface Calculator {
+	version { major 1 minor 0 }
+	
+	<**
+		@description: Basic arithmetic operations enumeration
+	**>
+	enumeration Operation {
+		ADD = 1
+		SUBTRACT = 2
+		MULTIPLY = 3
+		DIVIDE = 4
+		POWER = 5
+		SQRT = 6
+	}
+	
+	<**
+		@description: Calculation result structure
+	**>
+	struct CalculationResult {
+		Double result
+		String errorMessage
+		Boolean isValid
+		UInt64 timestamp
+	}
+	
+	<**
+		@description: Complex number structure for advanced operations
+	**>
+	struct ComplexNumber {
+		Double real
+		Double imaginary
+	}
+	
+	<**
+		@description: Calculator statistics
+	**>
+	struct CalculatorStats {
+		UInt32 totalOperations
+		UInt32 successfulOperations
+		UInt32 errorCount
+		Double averageExecutionTime
+	}
+	
+	<**
+		@description: Perform basic arithmetic operation
+		@param: left operand
+		@param: right operand  
+		@param: operation type
+		@return: calculation result
+	**>
+	method calculate {
+		in {
+			Double leftOperand
+			Double rightOperand
+			Operation operation
+		}
+		out {
+			CalculationResult result
+		}
+		error {
+			INVALID_OPERATION "Invalid operation specified"
+			DIVISION_BY_ZERO "Division by zero error"
+			OVERFLOW "Numeric overflow occurred"
+			UNDERFLOW "Numeric underflow occurred"
+		}
+	}
+	
+	<**
+		@description: Perform complex number arithmetic
+	**>
+	method calculateComplex {
+		in {
+			ComplexNumber left
+			ComplexNumber right
+			Operation operation
+		}
+		out {
+			ComplexNumber result
+		}
+		error CommonError
+	}
+	
+	<**
+		@description: Get calculator statistics
+	**>
+	method getStatistics {
+		out {
+			CalculatorStats stats
+		}
+	}
+	
+	<**
+		@description: Reset calculator state
+	**>
+	method reset {
+		out {
+			Boolean success
+		}
+	}
+	
+	<**
+		@description: Set calculator precision
+	**>
+	method setPrecision {
+		in {
+			UInt8 decimalPlaces
+		}
+		out {
+			Boolean success
+		}
+	}
+	
+	<**
+		@description: Broadcast when calculation is completed
+	**>
+	broadcast calculationCompleted {
+		out {
+			CalculationResult result
+			UInt64 sessionId
+		}
+	}
+	
+	<**
+		@description: Broadcast when error occurs
+	**>
+	broadcast errorOccurred {
+		out {
+			String errorMessage
+			UInt32 errorCode
+			UInt64 timestamp
+		}
+	}
+	
+	<**
+		@description: Current calculator precision
+	**>
+	attribute UInt8 precision readonly
+	
+	<**
+		@description: Calculator mode (scientific, basic, programmer)
+	**>
+	attribute String mode
+	
+	<**
+		@description: Maximum allowed input value
+	**>
+	attribute Double maxValue readonly
+}

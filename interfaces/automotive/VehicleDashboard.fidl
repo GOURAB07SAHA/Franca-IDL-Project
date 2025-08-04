@@ -1,0 +1,185 @@
+package org.example.automotive
+
+import org.example.common.* from "../common/CommonTypes.fidl"
+
+<**
+	@description: Vehicle dashboard interface for automotive applications
+	@author: FRANCA IDL Tutorial
+	@version: 1.0
+**>
+interface VehicleDashboard {
+	version { major 1 minor 0 }
+	
+	<**
+		@description: Vehicle transmission states
+	**>
+	enumeration TransmissionState {
+		PARK = 0
+		REVERSE = 1
+		NEUTRAL = 2
+		DRIVE = 3
+		SPORT = 4
+		MANUAL = 5
+	}
+	
+	<**
+		@description: Engine states
+	**>
+	enumeration EngineState {
+		OFF = 0
+		STARTING = 1
+		IDLE = 2
+		RUNNING = 3
+		OVERHEATED = 4
+		ERROR = 5
+	}
+	
+	<**
+		@description: Warning light types
+	**>
+	enumeration WarningLight {
+		ENGINE_CHECK = 1
+		OIL_PRESSURE = 2
+		BATTERY = 3
+		TEMPERATURE = 4
+		BRAKE = 5
+		ABS = 6
+		AIRBAG = 7
+		SEAT_BELT = 8
+		FUEL_LOW = 9
+		TIRE_PRESSURE = 10
+	}
+	
+	<**
+		@description: Vehicle speed and engine data
+	**>
+	struct VehicleData {
+		Float speed              // km/h
+		Float engineRPM          // revolutions per minute
+		Float fuelLevel          // percentage 0-100
+		Float engineTemperature  // Celsius
+		Float oilPressure        // bar
+		UInt32 odometer          // total kilometers
+		UInt32 tripMeter         // trip kilometers
+		TransmissionState transmission
+		EngineState engineState
+	}
+	
+	<**
+		@description: Warning status information
+	**>
+	struct WarningStatus {
+		WarningLight type
+		Boolean isActive
+		String message
+		StatusLevel severity
+		UInt64 activatedTime
+	}
+	
+	<**
+		@description: Fuel consumption data
+	**>
+	struct FuelConsumption {
+		Float instantConsumption  // L/100km
+		Float averageConsumption  // L/100km
+		Float rangeEstimate       // km remaining
+		UInt32 fuelUsedTrip       // mL
+	}
+	
+	<**
+		@description: Get current vehicle data
+	**>
+	method getVehicleData {
+		out {
+			VehicleData data
+		}
+		error CommonError
+	}
+	
+	<**
+		@description: Get active warnings
+	**>
+	method getActiveWarnings {
+		out {
+			WarningStatus[] warnings
+		}
+	}
+	
+	<**
+		@description: Get fuel consumption information
+	**>
+	method getFuelConsumption {
+		out {
+			FuelConsumption consumption
+		}
+	}
+	
+	<**
+		@description: Reset trip meter
+	**>
+	method resetTripMeter {
+		out {
+			Boolean success
+		}
+	}
+	
+	<**
+		@description: Set display units (metric/imperial)
+	**>
+	method setDisplayUnits {
+		in {
+			Boolean useMetric
+		}
+		out {
+			Boolean success
+		}
+	}
+	
+	<**
+		@description: Broadcast when vehicle data changes significantly
+	**>
+	broadcast vehicleDataChanged {
+		out {
+			VehicleData newData
+		}
+	}
+	
+	<**
+		@description: Broadcast when warning is activated/deactivated
+	**>
+	broadcast warningStatusChanged {
+		out {
+			WarningStatus warning
+		}
+	}
+	
+	<**
+		@description: Broadcast when fuel level is critically low
+	**>
+	broadcast fuelLevelCritical {
+		out {
+			Float remainingFuel
+			Float estimatedRange
+		}
+	}
+	
+	<**
+		@description: Current vehicle speed (read-only)
+	**>
+	attribute Float currentSpeed readonly
+	
+	<**
+		@description: Engine RPM (read-only)
+	**>
+	attribute Float currentRPM readonly
+	
+	<**
+		@description: Display brightness level
+	**>
+	attribute UInt8 displayBrightness
+	
+	<**
+		@description: Display units setting
+	**>
+	attribute Boolean useMetricUnits
+}

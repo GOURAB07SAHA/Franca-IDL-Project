@@ -1,0 +1,21 @@
+{
+  "name": "franca-calculator",
+  "version": "1.0.0",
+  "description": "Calculator implementation generated from FRANCA IDL",
+  "main": "calculator-server.js",
+  "scripts": {
+    "start": "node calculator-client.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "franca",
+    "idl",
+    "calculator",
+    "interface"
+  ],
+  "author": "FRANCA IDL Generator",
+  "license": "MIT",
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}

@@ -1,0 +1,68 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug Java Calculator Client",
+            "request": "launch",
+            "mainClass": "org.example.calculator.CalculatorClient",
+            "projectName": "franca-calculator",
+            "cwd": "${workspaceFolder}/generated/java",
+            "classPaths": [
+                "${workspaceFolder}/generated/java"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "type": "java",
+            "name": "Debug Java Calculator Implementation",
+            "request": "launch",
+            "mainClass": "org.example.calculator.CalculatorImpl",
+            "projectName": "franca-calculator",
+            "cwd": "${workspaceFolder}/generated/java",
+            "classPaths": [
+                "${workspaceFolder}/generated/java"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "type": "node",
+            "name": "Debug JavaScript Calculator",
+            "request": "launch",
+            "program": "${workspaceFolder}/generated/javascript/calculator-client.js",
+            "cwd": "${workspaceFolder}/generated/javascript",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "type": "cppdbg",
+            "name": "Debug C++ Calculator (Windows)",
+            "request": "launch",
+            "program": "${workspaceFolder}/generated/cpp/build/Debug/calculator_client.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/generated/cpp",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:\\mingw64\\bin\\gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build C++ (CMake)"
+        },
+        {
+            "type": "PowerShell",
+            "name": "Debug PowerShell Script",
+            "request": "launch",
+            "script": "${workspaceFolder}/run_all_tests.ps1",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

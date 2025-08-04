@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'org.example.calculator'
+version = '1.0.0'
+sourceCompatibility = '11'
+
+application {
+    mainClass = 'org.example.calculator.CalculatorClient'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

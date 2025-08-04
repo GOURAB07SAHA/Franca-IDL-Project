@@ -1,0 +1,170 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compile Java Calculator",
+            "type": "shell",
+            "command": "javac",
+            "args": [
+                "-cp", ".",
+                "org\\example\\calculator\\*.java"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/generated/java"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Java Calculator",
+            "type": "shell",
+            "command": "java",
+            "args": [
+                "-cp", ".",
+                "org.example.calculator.CalculatorClient"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/generated/java"
+            },
+            "group": "test",
+            "dependsOn": "Compile Java Calculator",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Run JavaScript Calculator",
+            "type": "shell",
+            "command": "node",
+            "args": ["calculator-client.js"],
+            "options": {
+                "cwd": "${workspaceFolder}/generated/javascript"
+            },
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Generate Code",
+            "type": "shell",
+            "command": "java",
+            "args": [
+                "SimpleCodeGenerator"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/tools"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Build C++ (CMake)",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "build"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/generated/cpp"
+            },
+            "group": "build",
+            "dependsOn": "Configure C++ (CMake)",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Configure C++ (CMake)",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-B", "build"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/generated/cpp"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Clean Generated Code",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "Remove-Item -Path '${workspaceFolder}/generated/java/org/example/calculator/*.class' -Force -ErrorAction SilentlyContinue"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Run All Tests",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-ExecutionPolicy", "Bypass",
+                "-File", "${workspaceFolder}/run_all_tests.ps1"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        }
+    ]
+}

@@ -1,0 +1,63 @@
+{
+    "folders": [
+        {
+            "name": "🚀 FRANCA IDL Project",
+            "path": "."
+        },
+        {
+            "name": "📄 Interface Definitions",
+            "path": "./interfaces"
+        },
+        {
+            "name": "☕ Java Generated Code",
+            "path": "./generated/java"
+        },
+        {
+            "name": "🌐 JavaScript Generated Code",
+            "path": "./generated/javascript"
+        },
+        {
+            "name": "⚡ C++ Generated Code",
+            "path": "./generated/cpp"
+        },
+        {
+            "name": "🔧 Tools & Scripts",
+            "path": "./tools"
+        },
+        {
+            "name": "📚 Documentation",
+            "path": "./docs"
+        }
+    ],
+    "settings": {
+        "java.project.referencedLibraries": [
+            "generated/java/**/*.jar"
+        ],
+        "java.project.sourcePaths": [
+            "generated/java"
+        ],
+        "files.watcherExclude": {
+            "**/build/**": true,
+            "**/node_modules/**": true,
+            "**/*.class": true
+        }
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-vscode.vscode-java-pack",
+            "ms-vscode.cpptools-extension-pack",
+            "ms-vscode.vscode-typescript-next",
+            "ms-vscode.powershell",
+            "eamodio.gitlens",
+            "formulahendry.code-runner"
+        ]
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": []
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": []
+    }
+}

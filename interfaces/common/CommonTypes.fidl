@@ -1,0 +1,100 @@
+package org.example.common
+
+<**
+	@description: Common types and error definitions used across all interfaces
+	@author: FRANCA IDL Tutorial
+	@version: 1.0
+**>
+typeCollection CommonTypes {
+	version { major 1 minor 0 }
+	
+	<**
+		@description: Standard error enumeration
+	**>
+	enumeration CommonError {
+		NO_ERROR = 0
+		INVALID_INPUT = 1
+		TIMEOUT = 2
+		COMMUNICATION_ERROR = 3
+		AUTHENTICATION_FAILED = 4
+		PERMISSION_DENIED = 5
+		RESOURCE_NOT_AVAILABLE = 6
+		INTERNAL_ERROR = 99
+	}
+	
+	<**
+		@description: Generic response structure
+	**>
+	struct Response {
+		Boolean success
+		String message
+		UInt32 errorCode
+		UInt64 timestamp
+	}
+	
+	<**
+		@description: Position coordinates
+	**>
+	struct Position {
+		Double latitude
+		Double longitude
+		Double altitude
+	}
+	
+	<**
+		@description: Time information
+	**>
+	struct TimeInfo {
+		UInt64 timestamp
+		String timezone
+		String isoFormat
+	}
+	
+	<**
+		@description: Version information
+	**>
+	struct Version {
+		UInt16 major
+		UInt16 minor
+		UInt16 patch
+		String buildInfo
+	}
+	
+	<**
+		@description: Configuration key-value pair
+	**>
+	struct ConfigItem {
+		String key
+		String value
+		String description
+	}
+	
+	<**
+		@description: Status levels
+	**>
+	enumeration StatusLevel {
+		OK = 0
+		WARNING = 1
+		ERROR = 2
+		CRITICAL = 3
+	}
+	
+	<**
+		@description: Data validation result
+	**>
+	struct ValidationResult {
+		Boolean isValid
+		String[] errors
+		String[] warnings
+	}
+	
+	// Type definitions using arrays and maps
+	array StringArray of String
+	array IntArray of Int32
+	array DoubleArray of Double
+	array PositionArray of Position
+	
+	map StringMap { String to String }
+	map IntMap { String to Int32 }
+	map ConfigMap { String to ConfigItem }
+}
