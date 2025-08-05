@@ -1,0 +1,50 @@
+{
+  "name": "franca-vehicle-dashboard",
+  "version": "1.0.0",
+  "description": "Vehicle Dashboard JavaScript Implementation from FRANCA IDL",
+  "main": "javascript/vehicle-dashboard.js",
+  "scripts": {
+    "start": "node javascript/vehicle-dashboard.js",
+    "dev": "nodemon javascript/vehicle-dashboard.js",
+    "test": "jest",
+    "lint": "eslint javascript/**/*.js",
+    "docker:build": "docker build -t vehicle-dashboard .",
+    "docker:run": "docker run -p 3000:3000 vehicle-dashboard"
+  },
+  "keywords": [
+    "franca",
+    "idl",
+    "vehicle",
+    "dashboard",
+    "automotive",
+    "javascript",
+    "nodejs"
+  ],
+  "author": "FRANCA IDL Tutorial",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.14.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0",
+    "compression": "^1.7.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "jest": "^29.7.0",
+    "eslint": "^8.52.0",
+    "prettier": "^3.0.3"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "franca-idl-project"
+  },
+  "bugs": {
+    "url": "franca-idl-project/issues"
+  },
+  "homepage": "franca-idl-project#readme"
+}

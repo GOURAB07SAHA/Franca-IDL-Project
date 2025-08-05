@@ -1,0 +1,110 @@
+version: '3.8'
+
+services:
+  vehicle-dashboard-java:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    container_name: dashboard-java
+    command: ["./run-dashboard.sh", "java"]
+    ports:
+      - "8080:8080"
+    environment:
+      - DASHBOARD_LANG=java
+      - DASHBOARD_PORT=8080
+    volumes:
+      - ../logs:/app/logs
+    networks:
+      - dashboard-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "VehicleDashboardApp"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  vehicle-dashboard-javascript:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    container_name: dashboard-javascript
+    command: ["./run-dashboard.sh", "javascript"]
+    ports:
+      - "3000:3000"
+    environment:
+      - DASHBOARD_LANG=javascript
+      - DASHBOARD_PORT=3000
+      - NODE_ENV=production
+    volumes:
+      - ../logs:/app/logs
+    networks:
+      - dashboard-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "vehicle-dashboard.js"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  vehicle-dashboard-cpp:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    container_name: dashboard-cpp
+    command: ["./run-dashboard.sh", "cpp"]
+    ports:
+      - "9090:9090"
+    environment:
+      - DASHBOARD_LANG=cpp
+      - DASHBOARD_PORT=9090
+    volumes:
+      - ../logs:/app/logs
+    networks:
+      - dashboard-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "vehicle-dashboard"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Load balancer (optional)
+  nginx-lb:
+    image: nginx:alpine
+    container_name: dashboard-loadbalancer
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/ssl/certs:ro
+    networks:
+      - dashboard-network
+    depends_on:
+      - vehicle-dashboard-java
+      - vehicle-dashboard-javascript
+      - vehicle-dashboard-cpp
+    restart: unless-stopped
+
+  # Monitoring with Prometheus (optional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: dashboard-monitoring
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - dashboard-network
+    restart: unless-stopped
+
+networks:
+  dashboard-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  dashboard-logs:
+    driver: local

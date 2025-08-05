@@ -58,6 +58,32 @@
             "preLaunchTask": "Build C++ (CMake)"
         },
         {
+            "type": "java",
+            "name": "Debug Vehicle Dashboard",
+            "request": "launch",
+            "mainClass": "org.example.automotive.VehicleDashboardApp",
+            "projectName": "franca-idl-project",
+            "cwd": "${workspaceFolder}/generated/java",
+            "classPaths": [
+                "${workspaceFolder}/generated/java"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "type": "java",
+            "name": "Debug Vehicle Dashboard Implementation",
+            "request": "launch",
+            "mainClass": "org.example.automotive.VehicleDashboardImpl",
+            "projectName": "franca-idl-project",
+            "cwd": "${workspaceFolder}/generated/java",
+            "classPaths": [
+                "${workspaceFolder}/generated/java"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
             "type": "PowerShell",
             "name": "Debug PowerShell Script",
             "request": "launch",

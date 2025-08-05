@@ -146,6 +146,70 @@
             }
         },
         {
+            "label": "Compile Vehicle Dashboard",
+            "type": "shell",
+            "command": "javac",
+            "args": [
+                "-cp", ".",
+                "org\\example\\automotive\\VehicleDashboard.java",
+                "org\\example\\automotive\\VehicleDashboardImpl.java",
+                "org\\example\\automotive\\VehicleDashboardApp.java"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/generated/java"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": ["$javac"]
+        },
+        {
+            "label": "Run Vehicle Dashboard",
+            "type": "shell",
+            "command": "java",
+            "args": [
+                "-cp", ".",
+                "org.example.automotive.VehicleDashboardApp"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/generated/java"
+            },
+            "group": "test",
+            "dependsOn": "Compile Vehicle Dashboard",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Clean Vehicle Dashboard",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "Remove-Item -Path '${workspaceFolder}/generated/java/org/example/automotive/*.class' -Force -ErrorAction SilentlyContinue"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
             "label": "Run All Tests",
             "type": "shell",
             "command": "powershell",

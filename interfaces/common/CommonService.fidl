@@ -1,0 +1,122 @@
+package org.example.common
+
+import org.example.common.* from "CommonTypes.fidl"
+
+<**
+	@description: Common service interface demonstrating usage of common types
+	@author: FRANCA IDL Tutorial
+	@version: 1.0
+**>
+interface CommonService {
+	version { major 1 minor 0 }
+	
+	<**
+		@description: Get system version information
+	**>
+	method getVersion {
+		out {
+			Version version
+		}
+		error CommonError
+	}
+	
+	<**
+		@description: Validate data according to rules
+	**>
+	method validateData {
+		in {
+			String data
+			StringArray rules
+		}
+		out {
+			ValidationResult result
+		}
+		error CommonError
+	}
+	
+	<**
+		@description: Get current position
+	**>
+	method getCurrentPosition {
+		out {
+			Position position
+			TimeInfo timeInfo
+		}
+		error CommonError
+	}
+	
+	<**
+		@description: Update configuration
+	**>
+	method updateConfiguration {
+		in {
+			ConfigMap config
+		}
+		out {
+			Response response
+		}
+		error CommonError
+	}
+	
+	<**
+		@description: Process array of positions
+	**>
+	method processPositions {
+		in {
+			PositionArray positions
+		}
+		out {
+			Position averagePosition
+			Double totalDistance
+		}
+		error CommonError
+	}
+	
+	<**
+		@description: Get system status
+	**>
+	method getSystemStatus {
+		out {
+			StatusLevel status
+			StringMap statusDetails
+			TimeInfo lastUpdate
+		}
+		error CommonError
+	}
+	
+	<**
+		@description: Broadcast when system status changes
+	**>
+	broadcast statusChanged {
+		out {
+			StatusLevel newStatus
+			String reason
+			TimeInfo timestamp
+		}
+	}
+	
+	<**
+		@description: Broadcast when configuration is updated
+	**>
+	broadcast configurationUpdated {
+		out {
+			ConfigMap updatedConfig
+			TimeInfo timestamp
+		}
+	}
+	
+	<**
+		@description: Current system status (read-only)
+	**>
+	attribute StatusLevel currentStatus readonly
+	
+	<**
+		@description: System uptime in seconds (read-only)
+	**>
+	attribute UInt64 uptime readonly
+	
+	<**
+		@description: Debug mode flag
+	**>
+	attribute Boolean debugMode
+}
