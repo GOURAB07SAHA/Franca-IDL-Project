@@ -7,7 +7,7 @@ public class VehicleDashboardApp {
 
     public static void main(String[] args) {
         VehicleDashboardImpl dashboard = new VehicleDashboardImpl();
-        
+
         // Set up event listeners
         dashboard.setVehicleDataChangedListener(event -> {
             System.out.println("Vehicle data changed:");
@@ -15,18 +15,18 @@ public class VehicleDashboardApp {
             System.out.println("RPM: " + event.newData.engineRPM);
             System.out.println("Fuel Level: " + event.newData.fuelLevel);
         });
-        
+
         dashboard.setWarningStatusChangedListener(event -> {
             System.out.println("Warning status changed:");
             System.out.println("Type: " + event.warning.type);
             System.out.println("Message: " + event.warning.message);
         });
-        
+
         dashboard.setFuelLevelCriticalListener(event -> {
             System.out.println("Fuel level critical: " + event.remainingFuel + "%");
             System.out.println("Estimated range: " + event.estimatedRange + " km");
         });
-        
+
         // Running demo operations
         System.out.println("Vehicle Dashboard Demo");
         System.out.println("========================");
