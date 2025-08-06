@@ -84,6 +84,32 @@
             "internalConsoleOptions": "neverOpen"
         },
         {
+            "type": "java",
+            "name": "Debug Common Service",
+            "request": "launch",
+            "mainClass": "org.example.common.CommonServiceApp",
+            "projectName": "franca-idl-project",
+            "cwd": "${workspaceFolder}/generated/java",
+            "classPaths": [
+                "${workspaceFolder}/generated/java"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "type": "java",
+            "name": "Debug Common Service Implementation",
+            "request": "launch",
+            "mainClass": "org.example.common.CommonServiceImpl",
+            "projectName": "franca-idl-project",
+            "cwd": "${workspaceFolder}/generated/java",
+            "classPaths": [
+                "${workspaceFolder}/generated/java"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
             "type": "PowerShell",
             "name": "Debug PowerShell Script",
             "request": "launch",

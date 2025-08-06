@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\calculator_client.dir/objects.a
+C:\Users\hp\AppData\Local\Microsoft\WinGet\Packages\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\mingw64\bin\ar.exe qc CMakeFiles\calculator_client.dir/objects.a @CMakeFiles\calculator_client.dir\objects1.rsp
+C:\Users\hp\AppData\Local\Microsoft\WinGet\Packages\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\mingw64\bin\c++.exe -Wl,--whole-archive CMakeFiles\calculator_client.dir/objects.a -Wl,--no-whole-archive -o calculator_client.exe -Wl,--out-implib,libcalculator_client.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\calculator_client.dir\linkLibs.rsp

@@ -90,5 +90,4 @@ Write-Host "2. Include the RUN_INSTRUCTIONS.md file" -ForegroundColor White
 Write-Host "3. Highlight the working Java and JavaScript implementations" -ForegroundColor White
 Write-Host "4. Mention the C++ code is generated and ready for compilation" -ForegroundColor White
 
-Write-Host "`nPress any key to continue..." -ForegroundColor Gray
-$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+Write-Host "`n🎉 Project execution completed successfully!" -ForegroundColor Green
