@@ -24,7 +24,6 @@ class CalculatorClient {
         console.log('=====================');
         
         try {
-            // Perform some calculations
             const result1 = await this.calculator.calculate(10.0, 5.0, 'ADD');
             if (result1.isValid) {
                 console.log(`10 + 5 = ${result1.result}`);
@@ -35,13 +34,11 @@ class CalculatorClient {
                 console.log(`10 / 3 = ${result2.result}`);
             }
             
-            // Test error case
             const result3 = await this.calculator.calculate(10.0, 0.0, 'DIVIDE');
             if (!result3.isValid) {
                 console.log(`Error: ${result3.errorMessage}`);
             }
             
-            // Get statistics
             const stats = await this.calculator.getStatistics();
             console.log('\nStatistics:');
             console.log(`Total operations: ${stats.totalOperations}`);
@@ -55,7 +52,6 @@ class CalculatorClient {
     }
 }
 
-// Run the demo if this file is executed directly
 if (require.main === module) {
     const client = new CalculatorClient();
     client.runDemo().catch(console.error);

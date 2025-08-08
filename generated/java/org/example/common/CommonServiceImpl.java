@@ -1,134 +1,151 @@
 package org.example.common;
 
-import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
-import java.time.Instant;
+import java.util.Map;
+import java.util.HashMap;
 
+/**
+ * CommonService implementation with all required methods
+ */
 public class CommonServiceImpl implements CommonService {
-
-    private String statusReason;
-    private Instant lastStatusChange;
-    private Map<String, ConfigItem> configuration = new HashMap<>();
+    
+    // Event listeners
     private Consumer<StatusChangedEvent> statusChangedListener;
-    private Consumer<ConfigurationUpdatedEvent> configUpdatedListener;
-
+    private Consumer<ConfigurationUpdatedEvent> configurationUpdatedListener;
+    
+    // Current service state
+    private StatusLevel currentStatus = StatusLevel.OK;
+    private Version serviceVersion;
+    private Position currentPosition;
+    private Map<String, ConfigItem> configuration;
+    
     public CommonServiceImpl() {
-        this.statusReason = "System initialized";
-        this.lastStatusChange = Instant.now();
+        initializeDefaultData();
     }
-
+    
+    private void initializeDefaultData() {
+        serviceVersion = new Version();
+        serviceVersion.major = 1;
+        serviceVersion.minor = 0;
+        serviceVersion.patch = 0;
+        serviceVersion.buildInfo = "Build-001";
+        
+        currentPosition = new Position();
+        currentPosition.latitude = 37.7749;
+        currentPosition.longitude = -122.4194;
+        currentPosition.altitude = 52.0;
+        
+        configuration = new HashMap<>();
+        ConfigItem defaultConfig = new ConfigItem();
+        defaultConfig.key = "default_timeout";
+        defaultConfig.value = "30000";
+        defaultConfig.description = "Default timeout in milliseconds";
+        configuration.put("default_timeout", defaultConfig);
+    }
+    
     @Override
     public CompletableFuture<Version> getVersion() {
-        return CompletableFuture.supplyAsync(() -> {
-            return new Version(1, 0, 0, "Initial release");
-        });
+        return CompletableFuture.completedFuture(serviceVersion);
     }
-
+    
     @Override
     public CompletableFuture<ValidationResult> validateData(String data, String[] rules) {
         return CompletableFuture.supplyAsync(() -> {
-            boolean valid = true;
-            List<String> errors = new ArrayList<>();
-            List<String> warnings = new ArrayList<>();
-
-            if (data == null || data.isEmpty()) {
-                valid = false;
-                errors.add("Data is empty");
+            ValidationResult result = new ValidationResult();
+            
+            if (data == null || data.trim().isEmpty()) {
+                result.isValid = false;
+                result.errors = new String[]{"Data cannot be null or empty"};
+                result.warnings = new String[0];
+            } else {
+                result.isValid = true;
+                result.errors = new String[0];
+                result.warnings = new String[0];
             }
-
-            if (rules != null) {
-                for (String rule : rules) {
-                    if (rule.equals("no-numbers") && data.matches(".*\\d.*")) {
-                        valid = false;
-                        errors.add("No numbers allowed");
-                    }
-                }
-            }
-
-            return new ValidationResult(valid, errors.toArray(new String[0]), warnings.toArray(new String[0]));
+            
+            return result;
         });
     }
-
+    
     @Override
     public CompletableFuture<Position> getCurrentPosition() {
-        return CompletableFuture.supplyAsync(() -> {
-            return new Position(52.5163, 13.3777, 34.0);
-        });
+        return CompletableFuture.completedFuture(currentPosition);
     }
-
-    @Override
-    public CompletableFuture<TimeInfo> getCurrentTime() {
-        return CompletableFuture.supplyAsync(() -> new TimeInfo());
-    }
-
+    
     @Override
     public CompletableFuture<Response> updateConfiguration(Map<String, ConfigItem> config) {
         return CompletableFuture.supplyAsync(() -> {
-            configuration.putAll(config);
-            if (configUpdatedListener != null) {
-                configUpdatedListener.accept(new ConfigurationUpdatedEvent(config));
+            Response response = new Response();
+            response.timestamp = System.currentTimeMillis();
+            
+            try {
+                if (config != null) {
+                    configuration.putAll(config);
+                    response.success = true;
+                    response.message = "Configuration updated successfully";
+                    response.errorCode = 0;
+                    
+                    // Trigger configuration updated event
+                    if (configurationUpdatedListener != null) {
+                        ConfigurationUpdatedEvent event = new ConfigurationUpdatedEvent();
+                        event.updatedConfig = new HashMap<>(configuration);
+                        event.timestamp = new TimeInfo();
+                        event.timestamp.timestamp = System.currentTimeMillis();
+                        event.timestamp.timezone = "UTC";
+                        event.timestamp.isoFormat = new java.util.Date().toString();
+                        configurationUpdatedListener.accept(event);
+                    }
+                } else {
+                    response.success = false;
+                    response.message = "Configuration cannot be null";
+                    response.errorCode = 1;
+                }
+            } catch (Exception e) {
+                response.success = false;
+                response.message = "Error updating configuration: " + e.getMessage();
+                response.errorCode = 99;
             }
-            return new Response(true, "Configuration updated successfully", 0);
+            
+            return response;
         });
     }
-
-    @Override
-    public CompletableFuture<Position> processPositions(Position[] positions) {
-        return CompletableFuture.supplyAsync(() -> {
-            if (positions == null || positions.length == 0) {
-                return new Position(0, 0, 0);
-            }
-            double avgLat = Arrays.stream(positions).mapToDouble(p -> p.latitude).average().orElse(0);
-            double avgLon = Arrays.stream(positions).mapToDouble(p -> p.longitude).average().orElse(0);
-            double avgAlt = Arrays.stream(positions).mapToDouble(p -> p.altitude).average().orElse(0);
-            return new Position(avgLat, avgLon, avgAlt);
-        });
-    }
-
+    
     @Override
     public CompletableFuture<StatusLevel> getSystemStatus() {
-        return CompletableFuture.supplyAsync(() -> StatusLevel.OK);
+        return CompletableFuture.completedFuture(currentStatus);
     }
-
-    @Override
-    public CompletableFuture<Map<String, String>> getStatusDetails() {
-        return CompletableFuture.supplyAsync(() -> {
-            Map<String, String> details = new HashMap<>();
-            details.put("system", "operational");
-            details.put("lastCheck", lastStatusChange.toString());
-            details.put("reason", statusReason);
-            return details;
-        });
-    }
-
+    
     @Override
     public void setStatusChangedListener(Consumer<StatusChangedEvent> listener) {
         this.statusChangedListener = listener;
     }
-
+    
     @Override
     public void setConfigurationUpdatedListener(Consumer<ConfigurationUpdatedEvent> listener) {
-        this.configUpdatedListener = listener;
+        this.configurationUpdatedListener = listener;
     }
-
-    @Override
-    public StatusLevel getCurrentStatus() {
-        return StatusLevel.OK;
+    
+    // Utility methods for testing
+    public void simulateStatusChange(StatusLevel newStatus, String reason) {
+        StatusLevel oldStatus = currentStatus;
+        currentStatus = newStatus;
+        
+        if (statusChangedListener != null && oldStatus != newStatus) {
+            StatusChangedEvent event = new StatusChangedEvent();
+            event.newStatus = newStatus;
+            event.reason = reason;
+            event.timestamp = new TimeInfo();
+            event.timestamp.timestamp = System.currentTimeMillis();
+            event.timestamp.timezone = "UTC";
+            event.timestamp.isoFormat = new java.util.Date().toString();
+            statusChangedListener.accept(event);
+        }
     }
-
-    @Override
-    public long getUptime() {
-        return Instant.now().getEpochSecond() - lastStatusChange.getEpochSecond();
-    }
-
-    @Override
-    public boolean getDebugMode() {
-        return true;
-    }
-
-    @Override
-    public void setDebugMode(boolean debugMode) {
-        // implementation can vary
+    
+    public void updatePosition(double latitude, double longitude, double altitude) {
+        currentPosition.latitude = latitude;
+        currentPosition.longitude = longitude;
+        currentPosition.altitude = altitude;
     }
 }

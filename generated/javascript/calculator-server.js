@@ -59,7 +59,7 @@ class Calculator extends EventEmitter {
             result.isValid = true;
             this.stats.successfulOperations++;
             
-            this.emit('calculationCompleted', result, 12345); // sessionId
+            this.emit('calculationCompleted', result, 12345);
             
         } catch (error) {
             result.isValid = false;
@@ -70,30 +70,10 @@ class Calculator extends EventEmitter {
         }
         
         const endTime = process.hrtime.bigint();
-        const executionTime = Number(endTime - startTime) / 1000; // microseconds
+        const executionTime = Number(endTime - startTime) / 1000;
         
-        // Update average execution time
         this.stats.averageExecutionTime = 
             (this.stats.averageExecutionTime * (this.stats.totalOperations - 1) + executionTime) / this.stats.totalOperations;
-        
-        return result;
-    }
-    
-    async calculateComplex(left, right, operation) {
-        const result = { real: 0, imaginary: 0 };
-        
-        switch (operation) {
-            case 'ADD':
-                result.real = left.real + right.real;
-                result.imaginary = left.imaginary + right.imaginary;
-                break;
-            case 'SUBTRACT':
-                result.real = left.real - right.real;
-                result.imaginary = left.imaginary - right.imaginary;
-                break;
-            default:
-                throw new Error('Complex operation not implemented');
-        }
         
         return result;
     }
@@ -110,14 +90,6 @@ class Calculator extends EventEmitter {
             averageExecutionTime: 0.0
         };
         return true;
-    }
-    
-    async setPrecision(decimalPlaces) {
-        if (decimalPlaces >= 0 && decimalPlaces <= 15) {
-            this.precision = decimalPlaces;
-            return true;
-        }
-        return false;
     }
 }
 

@@ -67,23 +67,70 @@
             }
         },
         {
-            "label": "Generate Code",
+            "label": "Generate Code from FRANCA IDL",
             "type": "shell",
             "command": "java",
             "args": [
-                "SimpleCodeGenerator"
+                "-cp", "${workspaceFolder}/tools",
+                "EnhancedCodeGenerator"
             ],
             "options": {
-                "cwd": "${workspaceFolder}/tools"
+                "cwd": "${workspaceFolder}"
             },
-            "group": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
             "presentation": {
                 "echo": true,
                 "reveal": "always",
-                "focus": false,
+                "focus": true,
                 "panel": "shared",
                 "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Setup Java Package Structure",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "New-Item -ItemType Directory -Path '${workspaceFolder}/generated/java/org/example/calculator' -Force; Move-Item -Path '${workspaceFolder}/generated/java/*.java' -Destination '${workspaceFolder}/generated/java/org/example/calculator/' -Force -ErrorAction SilentlyContinue; Move-Item -Path '${workspaceFolder}/generated/java/*.class' -Destination '${workspaceFolder}/generated/java/org/example/calculator/' -Force -ErrorAction SilentlyContinue"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "dependsOn": "Generate Code from FRANCA IDL",
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
                 "clear": false
+            }
+        },
+        {
+            "label": "Full Code Generation & Setup",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Generate Code from FRANCA IDL",
+                "Setup Java Package Structure"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
             }
         },
         {
@@ -204,6 +251,89 @@
                 "echo": true,
                 "reveal": "always",
                 "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Compile Common Service",
+            "type": "shell",
+            "command": "javac",
+            "args": [
+                "-cp", ".",
+                "org\\example\\common\\CommonService.java",
+                "org\\example\\common\\CommonServiceImpl.java",
+                "org\\example\\common\\CommonServiceApp.java",
+                "org\\example\\common\\CommonTypesImpl.java"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/generated/java"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": ["$javac"]
+        },
+        {
+            "label": "Run Common Service",
+            "type": "shell",
+            "command": "java",
+            "args": [
+                "-cp", ".",
+                "org.example.common.CommonServiceApp"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/generated/java"
+            },
+            "group": "test",
+            "dependsOn": "Compile Common Service",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Compile All Interfaces",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Compile Java Calculator",
+                "Compile Vehicle Dashboard",
+                "Compile Common Service"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Run All Interfaces Demo",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Run Java Calculator",
+                "Run Vehicle Dashboard",
+                "Run Common Service"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
                 "panel": "shared",
                 "showReuseMessage": true,
                 "clear": false

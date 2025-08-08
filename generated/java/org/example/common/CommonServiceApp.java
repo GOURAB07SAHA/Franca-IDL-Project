@@ -1,84 +1,102 @@
 package org.example.common;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.Map;
+import java.util.HashMap;
+
 /**
- * Demo application for CommonService
+ * Common Service demo application
  */
 public class CommonServiceApp {
-
+    
     public static void main(String[] args) {
-        CommonServiceImpl commonService = new CommonServiceImpl();
+        CommonService commonService = new CommonServiceImpl();
         
         // Set up event listeners
         commonService.setStatusChangedListener(event -> {
-            System.out.println("Status changed:");
-            System.out.println("New Status: " + event.newStatus);
-            System.out.println("Reason: " + event.reason);
-            System.out.println("Timestamp: " + event.timestamp.isoFormat);
+            System.out.println("Status changed to: " + event.newStatus + " (Reason: " + event.reason + ")");
         });
         
         commonService.setConfigurationUpdatedListener(event -> {
-            System.out.println("Configuration updated:");
-            System.out.println("Updated config items: " + event.updatedConfig.size());
-            System.out.println("Timestamp: " + event.timestamp.isoFormat);
+            System.out.println("Configuration updated: " + event.updatedConfig.size() + " items");
         });
         
-        // Running demo operations
         System.out.println("Common Service Demo");
         System.out.println("===================");
         
         try {
-            // Get version
-            CommonService.Version version = commonService.getVersion().get();
-            System.out.println("System Version: " + version);
+            // Get service version
+            CompletableFuture<CommonService.Version> versionFuture = commonService.getVersion();
+            CommonService.Version version = versionFuture.get();
+            
+            System.out.println("Service Information:");
+            System.out.println("  Version: " + version.major + "." + version.minor + "." + version.patch);
+            System.out.println("  Build: " + version.buildInfo);
             
             // Get current position
-            CommonService.Position position = commonService.getCurrentPosition().get();
-            System.out.println("Current Position: " + position);
-            
-            // Get current time
-            CommonService.TimeInfo timeInfo = commonService.getCurrentTime().get();
-            System.out.println("Current Time: " + timeInfo.isoFormat + " (" + timeInfo.timezone + ")");
-            
-            // Test data validation
-            String[] rules = {"no-numbers"};
-            CommonService.ValidationResult result = commonService.validateData("hello123", rules).get();
-            System.out.println("Validation Result: " + result.isValid);
-            if (result.errors.length > 0) {
-                System.out.println("Errors: " + String.join(", ", result.errors));
-            }
-            
-            // Process positions
-            CommonService.Position[] positions = {
-                new CommonService.Position(52.0, 13.0, 30.0),
-                new CommonService.Position(53.0, 14.0, 40.0),
-                new CommonService.Position(51.0, 12.0, 20.0)
-            };
-            CommonService.Position average = commonService.processPositions(positions).get();
-            System.out.println("Average Position: " + average);
-            
-            // Update configuration
-            java.util.Map<String, CommonService.ConfigItem> config = new java.util.HashMap<>();
-            config.put("debug", new CommonService.ConfigItem("debug", "true", "Enable debug mode"));
-            config.put("timeout", new CommonService.ConfigItem("timeout", "30", "Request timeout in seconds"));
-            
-            CommonService.Response response = commonService.updateConfiguration(config).get();
-            System.out.println("Configuration Update: " + response.message);
+            CompletableFuture<CommonService.Position> positionFuture = commonService.getCurrentPosition();
+            CommonService.Position position = positionFuture.get();
+            System.out.println("Current Position:");
+            System.out.println("  Latitude: " + position.latitude + "°");
+            System.out.println("  Longitude: " + position.longitude + "°");
+            System.out.println("  Altitude: " + position.altitude + " m");
             
             // Get system status
-            CommonService.StatusLevel status = commonService.getSystemStatus().get();
+            CompletableFuture<CommonService.StatusLevel> statusFuture = commonService.getSystemStatus();
+            CommonService.StatusLevel status = statusFuture.get();
             System.out.println("System Status: " + status);
             
-            // Get status details
-            java.util.Map<String, String> details = commonService.getStatusDetails().get();
-            System.out.println("Status Details:");
-            details.forEach((key, value) -> System.out.println("  " + key + ": " + value));
+            // Test data validation
+            System.out.println("\nTesting Data Validation:");
+            String[] validationRules = {"required", "min_length:5", "max_length:50"};
             
-            // Get attributes
-            System.out.println("Current Status: " + commonService.getCurrentStatus());
-            System.out.println("Uptime: " + commonService.getUptime() + " seconds");
-            System.out.println("Debug Mode: " + commonService.getDebugMode());
+            CompletableFuture<CommonService.ValidationResult> result1 = 
+                commonService.validateData("Hello World!", validationRules);
+            CommonService.ValidationResult validation1 = result1.get();
+            System.out.println("  \"Hello World!\" validation: " + 
+                (validation1.isValid ? "✅ Valid" : "❌ Invalid - " + 
+                (validation1.errors.length > 0 ? validation1.errors[0] : "Unknown error")));
             
-        } catch (Exception e) {
+            CompletableFuture<CommonService.ValidationResult> result2 = 
+                commonService.validateData("Hi", validationRules);
+            CommonService.ValidationResult validation2 = result2.get();
+            System.out.println("  \"Hi\" validation: " + 
+                (validation2.isValid ? "✅ Valid" : "❌ Invalid - " + 
+                (validation2.errors.length > 0 ? validation2.errors[0] : "Unknown error")));
+            
+            // Test configuration operations
+            System.out.println("\nTesting Configuration:");
+            
+            CommonService.ConfigItem newConfig = new CommonService.ConfigItem();
+            newConfig.key = "api_timeout";
+            newConfig.value = "60000";
+            newConfig.description = "API timeout in milliseconds";
+            
+            Map<String, CommonService.ConfigItem> configMap = new HashMap<>();
+            configMap.put(newConfig.key, newConfig);
+            
+            CompletableFuture<CommonService.Response> configResult = 
+                commonService.updateConfiguration(configMap);
+            CommonService.Response configResponse = configResult.get();
+            
+            if (configResponse.success) {
+                System.out.println("✅ Configuration updated: " + configResponse.message);
+            } else {
+                System.out.println("❌ Configuration update failed: " + configResponse.message);
+            }
+            
+            // Test event simulation
+            if (commonService instanceof CommonServiceImpl) {
+                System.out.println("\nSimulating Events:");
+                CommonServiceImpl impl = (CommonServiceImpl) commonService;
+                
+                impl.simulateStatusChange(CommonService.StatusLevel.WARNING, "System load high");
+                impl.updatePosition(40.7128, -74.0060, 10.0); // New York coordinates
+                impl.simulateStatusChange(CommonService.StatusLevel.OK, "System load normalized");
+            }
+            
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
     }

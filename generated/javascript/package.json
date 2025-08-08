@@ -1,7 +1,7 @@
 {
-  "name": "franca-calculator",
+  "name": "franca-comprehensive",
   "version": "1.0.0",
-  "description": "Calculator implementation generated from FRANCA IDL",
+  "description": "Comprehensive implementation generated from FRANCA IDL",
   "main": "calculator-server.js",
   "scripts": {
     "start": "node calculator-client.js",
@@ -11,9 +11,10 @@
     "franca",
     "idl",
     "calculator",
+    "automotive",
     "interface"
   ],
-  "author": "FRANCA IDL Generator",
+  "author": "Enhanced FRANCA IDL Generator",
   "license": "MIT",
   "engines": {
     "node": ">=12.0.0"

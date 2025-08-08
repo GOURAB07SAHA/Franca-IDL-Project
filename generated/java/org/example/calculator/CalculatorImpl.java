@@ -72,7 +72,6 @@ public class CalculatorImpl implements Calculator {
             long endTime = System.nanoTime();
             double executionTime = (endTime - startTime) / 1000.0; // microseconds
             
-            // Update average execution time
             stats.averageExecutionTime = 
                 (stats.averageExecutionTime * (stats.totalOperations - 1) + executionTime) / stats.totalOperations;
             

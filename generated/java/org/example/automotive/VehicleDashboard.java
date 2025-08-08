@@ -2,9 +2,10 @@ package org.example.automotive;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+import org.example.common.*;
 
 /**
- * Vehicle Dashboard interface generated from FRANCA IDL
+ * VehicleDashboard interface generated from FRANCA IDL
  */
 public interface VehicleDashboard {
     
@@ -25,8 +26,8 @@ public interface VehicleDashboard {
     }
     
     enum WarningLight {
-        ENGINE_CHECK(1), OIL_PRESSURE(2), BATTERY(3), TEMPERATURE(4), 
-        BRAKE(5), ABS(6), AIRBAG(7), SEAT_BELT(8), FUEL_LOW(9), TIRE_PRESSURE(10);
+        ENGINE_CHECK(1), OIL_PRESSURE(2), BATTERY(3), TEMPERATURE(4), BRAKE(5),
+        ABS(6), AIRBAG(7), SEAT_BELT(8), FUEL_LOW(9), TIRE_PRESSURE(10);
         
         private final int value;
         WarningLight(int value) { this.value = value; }
@@ -42,30 +43,15 @@ public interface VehicleDashboard {
     }
     
     class VehicleData {
-        public float speed;              // km/h
-        public float engineRPM;          // revolutions per minute
-        public float fuelLevel;          // percentage 0-100
-        public float engineTemperature;  // Celsius
-        public float oilPressure;        // bar
-        public int odometer;             // total kilometers
-        public int tripMeter;            // trip kilometers
+        public float speed;
+        public float engineRPM;
+        public float fuelLevel;
+        public float engineTemperature;
+        public float oilPressure;
+        public int odometer;
+        public int tripMeter;
         public TransmissionState transmission;
         public EngineState engineState;
-        
-        public VehicleData() {}
-        
-        public VehicleData(float speed, float rpm, float fuel, float temp, float oil, 
-                          int odometer, int trip, TransmissionState trans, EngineState engine) {
-            this.speed = speed;
-            this.engineRPM = rpm;
-            this.fuelLevel = fuel;
-            this.engineTemperature = temp;
-            this.oilPressure = oil;
-            this.odometer = odometer;
-            this.tripMeter = trip;
-            this.transmission = trans;
-            this.engineState = engine;
-        }
     }
     
     class WarningStatus {
@@ -74,32 +60,13 @@ public interface VehicleDashboard {
         public String message;
         public StatusLevel severity;
         public long activatedTime;
-        
-        public WarningStatus() {}
-        
-        public WarningStatus(WarningLight type, boolean active, String msg, StatusLevel sev, long time) {
-            this.type = type;
-            this.isActive = active;
-            this.message = msg;
-            this.severity = sev;
-            this.activatedTime = time;
-        }
     }
     
     class FuelConsumption {
-        public float instantConsumption;  // L/100km
-        public float averageConsumption;  // L/100km
-        public float rangeEstimate;       // km remaining
-        public int fuelUsedTrip;          // mL
-        
-        public FuelConsumption() {}
-        
-        public FuelConsumption(float instant, float average, float range, int used) {
-            this.instantConsumption = instant;
-            this.averageConsumption = average;
-            this.rangeEstimate = range;
-            this.fuelUsedTrip = used;
-        }
+        public float instantConsumption;
+        public float averageConsumption;
+        public float rangeEstimate;
+        public int fuelUsedTrip;
     }
     
     // Methods
@@ -118,8 +85,8 @@ public interface VehicleDashboard {
     class VehicleDataChangedEvent {
         public VehicleData newData;
         
-        public VehicleDataChangedEvent(VehicleData data) {
-            this.newData = data;
+        public VehicleDataChangedEvent(VehicleData newData) {
+            this.newData = newData;
         }
     }
     
@@ -135,9 +102,9 @@ public interface VehicleDashboard {
         public float remainingFuel;
         public float estimatedRange;
         
-        public FuelLevelCriticalEvent(float fuel, float range) {
-            this.remainingFuel = fuel;
-            this.estimatedRange = range;
+        public FuelLevelCriticalEvent(float remainingFuel, float estimatedRange) {
+            this.remainingFuel = remainingFuel;
+            this.estimatedRange = estimatedRange;
         }
     }
 }

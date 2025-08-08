@@ -1,3 +1,0 @@
-C:/Users/hp/franca-idl-project/generated/cpp/build/CMakeFiles/calculator_client.dir
-C:/Users/hp/franca-idl-project/generated/cpp/build/CMakeFiles/edit_cache.dir
-C:/Users/hp/franca-idl-project/generated/cpp/build/CMakeFiles/rebuild_cache.dir
